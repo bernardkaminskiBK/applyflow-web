@@ -6,7 +6,7 @@ import {
   DialogTitle,
   TextField,
 } from "@mui/material";
-import type { CompanyFormErrors } from "../../types/company/companyFormError";
+import type { CompanyFormErrors } from "../../types/company/companyFormErrors";
 
 type CompanyFormDialogProps = {
   open: boolean;

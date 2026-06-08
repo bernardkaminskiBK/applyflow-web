@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import ConfirmDeleteDialog from "../../components/common/ConfirmDeleteDialog";
 import type { Company } from "../../types/company/company";
 import CompanyFormDialog from "../../components/companies/CompanyFormDialog";
-import type { CompanyFormErrors } from "../../types/company/companyFormError";
+import type { CompanyFormErrors } from "../../types/company/companyFormErrors";
 import {
   Box,
   Button,
