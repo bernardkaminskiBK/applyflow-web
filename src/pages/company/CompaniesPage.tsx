@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { createCompany, getCompanies } from "../api/companiesApi";
-import type { Company } from "../types/company";
-import CompanyFormDialog from "../components/Companies/CompanyFormDialog";
-import type { CompanyFormErrors } from "../types/CompanyFormError";
+import { createCompany, getCompanies } from "../../api/companiesApi";
+import type { Company } from "../../types/company/company";
+import CompanyFormDialog from "../../components/Companies/CompanyFormDialog";
+import type { CompanyFormErrors } from "../../types/company/companyFormError";
 import {
   Box,
   Button,
@@ -15,6 +15,7 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
+import { Link } from "react-router-dom";
 
 export default function CompaniesPage() {
   const [companies, setCompanies] = useState<Company[]>([]);
@@ -98,7 +99,9 @@ export default function CompaniesPage() {
           <TableBody>
             {companies.map((company) => (
               <TableRow key={company.id}>
-                <TableCell>{company.name}</TableCell>
+                <TableCell>
+                  <Link to={`/companies/${company.id}`}>{company.name}</Link>
+                </TableCell>
                 <TableCell>{company.city}</TableCell>
                 <TableCell>{company.website}</TableCell>
                 <TableCell>{company.note}</TableCell>

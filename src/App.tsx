@@ -1,10 +1,11 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import AppLayout from "./components/layout/AppLayout";
 import DashboardPage from "./pages/DashboardPage";
-import CompaniesPage from "./pages/CompaniesPage";
+import CompaniesPage from "./pages/company/CompaniesPage";
 import JobApplicationsPage from "./pages/JobApplicationsPage";
 import ApplicationEventsPage from "./pages/ApplicationEventsPage";
 import ContactPersonsPage from "./pages/ContactPersonsPage";
+import CompanyDetailsPage from "./pages/company/CompanyDetailsPage";
 
 export default function App() {
   return (
@@ -13,6 +14,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<DashboardPage />} />
           <Route path="/companies" element={<CompaniesPage />} />
+          <Route path="/companies/:id" element={<CompanyDetailsPage />} />
           <Route path="/job-applications" element={<JobApplicationsPage />} />
           <Route
             path="/application-events"
