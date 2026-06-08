@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { createCompany, getCompanies } from "../../api/companiesApi";
+import { Link } from "react-router-dom";
+import ConfirmDeleteDialog from "../../components/common/ConfirmDeleteDialog";
 import type { Company } from "../../types/company/company";
 import CompanyFormDialog from "../../components/Companies/CompanyFormDialog";
 import type { CompanyFormErrors } from "../../types/company/companyFormError";
@@ -15,7 +16,11 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { Link } from "react-router-dom";
+import {
+  createCompany,
+  deleteCompany,
+  getCompanies,
+} from "../../api/companiesApi";
 
 export default function CompaniesPage() {
   const [companies, setCompanies] = useState<Company[]>([]);
@@ -27,6 +32,9 @@ export default function CompaniesPage() {
   const [city, setCity] = useState("");
   const [website, setWebsite] = useState("");
   const [note, setNote] = useState("");
+
+  const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   useEffect(() => {
     loadCompanies();
@@ -69,6 +77,19 @@ export default function CompaniesPage() {
     }
   }
 
+  async function handleDeleteCompany() {
+    if (!selectedCompany) {
+      return;
+    }
+
+    await deleteCompany(selectedCompany.id);
+
+    await loadCompanies();
+
+    setIsDeleteDialogOpen(false);
+    setSelectedCompany(null);
+  }
+
   return (
     <Box>
       <Box
@@ -93,6 +114,7 @@ export default function CompaniesPage() {
               <TableCell sx={{ fontWeight: "bold" }}>City</TableCell>
               <TableCell sx={{ fontWeight: "bold" }}>Website</TableCell>
               <TableCell sx={{ fontWeight: "bold" }}>Note</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>Actions</TableCell>
             </TableRow>
           </TableHead>
 
@@ -105,6 +127,18 @@ export default function CompaniesPage() {
                 <TableCell>{company.city}</TableCell>
                 <TableCell>{company.website}</TableCell>
                 <TableCell>{company.note}</TableCell>
+                <TableCell>
+                  <Button
+                    color="error"
+                    variant="outlined"
+                    onClick={() => {
+                      setSelectedCompany(company);
+                      setIsDeleteDialogOpen(true);
+                    }}
+                  >
+                    Delete
+                  </Button>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -124,6 +158,15 @@ export default function CompaniesPage() {
         onNoteChange={setNote}
         onClose={() => setIsCreateDialogOpen(false)}
         onSave={handleCreateCompany}
+      />
+
+      <ConfirmDeleteDialog
+        open={isDeleteDialogOpen}
+        title="Delete Company"
+        itemType="company"
+        itemName={selectedCompany?.name}
+        onClose={() => setIsDeleteDialogOpen(false)}
+        onConfirm={handleDeleteCompany}
       />
     </Box>
   );
