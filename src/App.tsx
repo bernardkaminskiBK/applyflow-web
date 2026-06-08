@@ -1,11 +1,11 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import AppLayout from "./components/layout/AppLayout";
 import DashboardPage from "./pages/DashboardPage";
-import CompaniesPage from "./pages/company/CompaniesPage";
+import CompaniesPage from "./pages/companies/CompaniesPage";
 import JobApplicationsPage from "./pages/JobApplicationsPage";
 import ApplicationEventsPage from "./pages/ApplicationEventsPage";
 import ContactPersonsPage from "./pages/ContactPersonsPage";
-import CompanyDetailsPage from "./pages/company/CompanyDetailsPage";
+import CompanyDetailsPage from "./pages/companies/CompanyDetailsPage";
 
 export default function App() {
   return (

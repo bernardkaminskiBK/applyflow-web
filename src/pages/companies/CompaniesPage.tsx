@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import ConfirmDeleteDialog from "../../components/common/ConfirmDeleteDialog";
 import type { Company } from "../../types/company/company";
-import CompanyFormDialog from "../../components/Companies/CompanyFormDialog";
+import CompanyFormDialog from "../../components/companies/CompanyFormDialog";
 import type { CompanyFormErrors } from "../../types/company/companyFormError";
 import {
   Box,
   Button,
   Paper,
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -20,6 +21,7 @@ import {
   createCompany,
   deleteCompany,
   getCompanies,
+  updateCompany,
 } from "../../api/companiesApi";
 
 export default function CompaniesPage() {
@@ -35,6 +37,9 @@ export default function CompaniesPage() {
 
   const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [editingCompany, setEditingCompany] = useState<Company | null>(null);
 
   useEffect(() => {
     loadCompanies();
@@ -77,6 +82,37 @@ export default function CompaniesPage() {
     }
   }
 
+  async function handleEditCompany() {
+    if (!editingCompany) {
+      return;
+    }
+
+    try {
+      setErrors({});
+
+      await updateCompany(editingCompany.id, {
+        name,
+        city,
+        website,
+        note,
+      });
+
+      await loadCompanies();
+
+      setIsEditDialogOpen(false);
+      setEditingCompany(null);
+    } catch (error: any) {
+      const validationErrors = error.response?.data?.errors;
+
+      setErrors({
+        name: validationErrors?.Name?.[0],
+        city: validationErrors?.City?.[0],
+        website: validationErrors?.Website?.[0],
+        note: validationErrors?.Note?.[0],
+      });
+    }
+  }
+
   async function handleDeleteCompany() {
     if (!selectedCompany) {
       return;
@@ -88,6 +124,17 @@ export default function CompaniesPage() {
 
     setIsDeleteDialogOpen(false);
     setSelectedCompany(null);
+  }
+
+  function openEditDialog(company: Company) {
+    setEditingCompany(company);
+
+    setName(company.name);
+    setCity(company.city || "");
+    setWebsite(company.website || "");
+    setNote(company.note! || "");
+
+    setIsEditDialogOpen(true);
   }
 
   return (
@@ -128,16 +175,24 @@ export default function CompaniesPage() {
                 <TableCell>{company.website}</TableCell>
                 <TableCell>{company.note}</TableCell>
                 <TableCell>
-                  <Button
-                    color="error"
-                    variant="outlined"
-                    onClick={() => {
-                      setSelectedCompany(company);
-                      setIsDeleteDialogOpen(true);
-                    }}
-                  >
-                    Delete
-                  </Button>
+                  <Stack direction="row" spacing={1}>
+                    <Button
+                      variant="outlined"
+                      onClick={() => openEditDialog(company)}
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      color="error"
+                      variant="outlined"
+                      onClick={() => {
+                        setSelectedCompany(company);
+                        setIsDeleteDialogOpen(true);
+                      }}
+                    >
+                      Delete
+                    </Button>
+                  </Stack>
                 </TableCell>
               </TableRow>
             ))}
@@ -158,6 +213,21 @@ export default function CompaniesPage() {
         onNoteChange={setNote}
         onClose={() => setIsCreateDialogOpen(false)}
         onSave={handleCreateCompany}
+      />
+
+      <CompanyFormDialog
+        open={isEditDialogOpen}
+        name={name}
+        city={city}
+        website={website}
+        note={note}
+        errors={errors}
+        onNameChange={setName}
+        onCityChange={setCity}
+        onWebsiteChange={setWebsite}
+        onNoteChange={setNote}
+        onClose={() => setIsEditDialogOpen(false)}
+        onSave={handleEditCompany}
       />
 
       <ConfirmDeleteDialog
