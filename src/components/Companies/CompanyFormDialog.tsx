@@ -10,6 +10,7 @@ import type { CompanyFormErrors } from "../../types/company/companyFormError";
 
 type CompanyFormDialogProps = {
   open: boolean;
+  title: string;
   name: string;
   city: string;
   website: string;
@@ -25,6 +26,7 @@ type CompanyFormDialogProps = {
 
 export default function CompanyFormDialog({
   open,
+  title,
   name,
   city,
   website,
@@ -39,7 +41,7 @@ export default function CompanyFormDialog({
 }: CompanyFormDialogProps) {
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
-      <DialogTitle>Add Company</DialogTitle>
+      <DialogTitle>{title}</DialogTitle>
 
       <DialogContent>
         <TextField

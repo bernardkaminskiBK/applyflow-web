@@ -27,7 +27,6 @@ import {
 export default function CompaniesPage() {
   const [companies, setCompanies] = useState<Company[]>([]);
 
-  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [errors, setErrors] = useState<CompanyFormErrors>({});
 
   const [name, setName] = useState("");
@@ -36,10 +35,10 @@ export default function CompaniesPage() {
   const [note, setNote] = useState("");
 
   const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editingCompany, setEditingCompany] = useState<Company | null>(null);
+
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isFormDialogOpen, setIsFormDialogOpen] = useState(false);
 
   useEffect(() => {
     loadCompanies();
@@ -50,57 +49,58 @@ export default function CompaniesPage() {
     setCompanies(data);
   }
 
-  async function handleCreateCompany() {
-    try {
-      setErrors({});
-
-      await createCompany({
-        name,
-        city,
-        website,
-        note,
-      });
-
-      await loadCompanies();
-
-      setName("");
-      setCity("");
-      setWebsite("");
-      setNote("");
-      setErrors({});
-
-      setIsCreateDialogOpen(false);
-    } catch (error: any) {
-      const validationErrors = error.response?.data?.errors;
-
-      setErrors({
-        name: validationErrors?.Name?.[0],
-        city: validationErrors?.City?.[0],
-        website: validationErrors?.Website?.[0],
-        note: validationErrors?.Note?.[0],
-      });
-    }
+  function resetForm() {
+    setName("");
+    setCity("");
+    setWebsite("");
+    setNote("");
+    setErrors({});
   }
 
-  async function handleEditCompany() {
-    if (!editingCompany) {
-      return;
-    }
+  function openCreateDialog() {
+    setEditingCompany(null);
+    resetForm();
+    setIsFormDialogOpen(true);
+  }
 
+  function openEditDialog(company: Company) {
+    setEditingCompany(company);
+
+    setName(company.name);
+    setCity(company.city || "");
+    setWebsite(company.website || "");
+    setNote(company.note || "");
+    setErrors({});
+
+    setIsFormDialogOpen(true);
+  }
+
+  function closeFormDialog() {
+    setIsFormDialogOpen(false);
+    setEditingCompany(null);
+    resetForm();
+  }
+
+  async function handleSaveCompany() {
     try {
       setErrors({});
 
-      await updateCompany(editingCompany.id, {
+      const request = {
         name,
         city,
         website,
         note,
-      });
+      };
+
+      if (editingCompany) {
+        await updateCompany(editingCompany.id, request);
+      } else {
+        await createCompany(request);
+      }
 
       await loadCompanies();
 
-      setIsEditDialogOpen(false);
-      setEditingCompany(null);
+      closeFormDialog();
     } catch (error: any) {
       const validationErrors = error.response?.data?.errors;
 
@@ -126,17 +126,6 @@ export default function CompaniesPage() {
     setSelectedCompany(null);
   }
 
-  function openEditDialog(company: Company) {
-    setEditingCompany(company);
-
-    setName(company.name);
-    setCity(company.city || "");
-    setWebsite(company.website || "");
-    setNote(company.note! || "");
-
-    setIsEditDialogOpen(true);
-  }
-
   return (
     <Box>
       <Box
@@ -148,7 +137,7 @@ export default function CompaniesPage() {
       >
         <Typography variant="h4">Companies</Typography>
 
-        <Button variant="contained" onClick={() => setIsCreateDialogOpen(true)}>
+        <Button variant="contained" onClick={openCreateDialog}>
           Add Company
         </Button>
       </Box>
@@ -201,7 +190,8 @@ export default function CompaniesPage() {
       </TableContainer>
 
       <CompanyFormDialog
-        open={isCreateDialogOpen}
+        open={isFormDialogOpen}
+        title={editingCompany ? "Edit Company" : "Add Company"}
         name={name}
         city={city}
         website={website}
@@ -211,23 +201,8 @@ export default function CompaniesPage() {
         onCityChange={setCity}
         onWebsiteChange={setWebsite}
         onNoteChange={setNote}
-        onClose={() => setIsCreateDialogOpen(false)}
-        onSave={handleCreateCompany}
-      />
-
-      <CompanyFormDialog
-        open={isEditDialogOpen}
-        name={name}
-        city={city}
-        website={website}
-        note={note}
-        errors={errors}
-        onNameChange={setName}
-        onCityChange={setCity}
-        onWebsiteChange={setWebsite}
-        onNoteChange={setNote}
-        onClose={() => setIsEditDialogOpen(false)}
-        onSave={handleEditCompany}
+        onClose={closeFormDialog}
+        onSave={handleSaveCompany}
       />
 
       <ConfirmDeleteDialog
