@@ -6,6 +6,7 @@ import {
   DialogTitle,
   TextField,
 } from "@mui/material";
+import type { CompanyFormErrors } from "../../types/CompanyFormError";
 
 type CompanyFormDialogProps = {
   open: boolean;
@@ -13,6 +14,7 @@ type CompanyFormDialogProps = {
   city: string;
   website: string;
   note: string;
+  errors: CompanyFormErrors;
   onNameChange: (value: string) => void;
   onCityChange: (value: string) => void;
   onWebsiteChange: (value: string) => void;
@@ -27,6 +29,7 @@ export default function CompanyFormDialog({
   city,
   website,
   note,
+  errors,
   onNameChange,
   onCityChange,
   onWebsiteChange,
@@ -43,6 +46,8 @@ export default function CompanyFormDialog({
           label="Name"
           value={name}
           onChange={(e) => onNameChange(e.target.value)}
+          error={Boolean(errors.name)}
+          helperText={errors.name}
           fullWidth
           margin="normal"
         />
@@ -51,6 +56,8 @@ export default function CompanyFormDialog({
           label="City"
           value={city}
           onChange={(e) => onCityChange(e.target.value)}
+          error={Boolean(errors.city)}
+          helperText={errors.city}
           fullWidth
           margin="normal"
         />
@@ -59,6 +66,8 @@ export default function CompanyFormDialog({
           label="Website"
           value={website}
           onChange={(e) => onWebsiteChange(e.target.value)}
+          error={Boolean(errors.website)}
+          helperText={errors.website}
           fullWidth
           margin="normal"
         />
@@ -67,6 +76,8 @@ export default function CompanyFormDialog({
           label="Note"
           value={note}
           onChange={(e) => onNoteChange(e.target.value)}
+          error={Boolean(errors.note)}
+          helperText={errors.note}
           fullWidth
           multiline
           rows={3}

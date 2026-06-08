@@ -1,4 +1,8 @@
 import { useEffect, useState } from "react";
+import { createCompany, getCompanies } from "../api/companiesApi";
+import type { Company } from "../types/company";
+import CompanyFormDialog from "../components/Companies/CompanyFormDialog";
+import type { CompanyFormErrors } from "../types/CompanyFormError";
 import {
   Box,
   Button,
@@ -11,14 +15,12 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { createCompany, getCompanies } from "../api/companiesApi";
-import type { Company } from "../types/company";
-import CompanyFormDialog from "../components/Companies/CompanyFormDialog";
 
 export default function CompaniesPage() {
   const [companies, setCompanies] = useState<Company[]>([]);
 
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [errors, setErrors] = useState<CompanyFormErrors>({});
 
   const [name, setName] = useState("");
   const [city, setCity] = useState("");
@@ -35,21 +37,35 @@ export default function CompaniesPage() {
   }
 
   async function handleCreateCompany() {
-    await createCompany({
-      name,
-      city,
-      website,
-      note,
-    });
+    try {
+      setErrors({});
 
-    await loadCompanies();
+      await createCompany({
+        name,
+        city,
+        website,
+        note,
+      });
 
-    setName("");
-    setCity("");
-    setWebsite("");
-    setNote("");
+      await loadCompanies();
 
-    setIsCreateDialogOpen(false);
+      setName("");
+      setCity("");
+      setWebsite("");
+      setNote("");
+      setErrors({});
+
+      setIsCreateDialogOpen(false);
+    } catch (error: any) {
+      const validationErrors = error.response?.data?.errors;
+
+      setErrors({
+        name: validationErrors?.Name?.[0],
+        city: validationErrors?.City?.[0],
+        website: validationErrors?.Website?.[0],
+        note: validationErrors?.Note?.[0],
+      });
+    }
   }
 
   return (
@@ -98,6 +114,7 @@ export default function CompaniesPage() {
         city={city}
         website={website}
         note={note}
+        errors={errors}
         onNameChange={setName}
         onCityChange={setCity}
         onWebsiteChange={setWebsite}
