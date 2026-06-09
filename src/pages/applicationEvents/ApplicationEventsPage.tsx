@@ -187,7 +187,9 @@ export default function ApplicationEventsPage() {
                     />
                   </Link>
                 </TableCell>
-                <TableCell>{event.eventDate}</TableCell>
+                <TableCell sx={{ fontWeight: "bold" }}>
+                  {event.eventDate}
+                </TableCell>
                 <TableCell>{event.note}</TableCell>
                 <TableCell>
                   <Stack direction="row" spacing={1}>

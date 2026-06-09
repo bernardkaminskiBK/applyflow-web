@@ -168,7 +168,9 @@ export default function CompaniesPage() {
                   <Link to={`/companies/${company.id}`}>{company.name}</Link>
                 </TableCell>
                 <TableCell>{company.city}</TableCell>
-                <TableCell>{company.website}</TableCell>
+                <TableCell sx={{ fontWeight: "bold" }}>
+                  {company.website}
+                </TableCell>
                 <TableCell>{company.note}</TableCell>
                 <TableCell>
                   <Stack direction="row" spacing={1}>

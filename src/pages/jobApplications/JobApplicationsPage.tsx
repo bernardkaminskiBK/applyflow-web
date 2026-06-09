@@ -218,7 +218,9 @@ export default function JobApplicationsPage() {
                     variant="filled"
                   />
                 </TableCell>
-                <TableCell>{getWorkModeText(application.workMode)}</TableCell>
+                <TableCell sx={{ fontStyle: "italic" }}>
+                  {getWorkModeText(application.workMode)}
+                </TableCell>
                 <TableCell sx={{ fontWeight: "bold" }}>
                   {getSourceText(application.source)}
                 </TableCell>
