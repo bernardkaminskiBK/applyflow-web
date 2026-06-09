@@ -62,12 +62,12 @@ export default function DashboardPage() {
             About ApplyFlow
           </Typography>
 
-          <Typography>
+          <Typography sx={{ mb: 2 }}>
             ApplyFlow is a small job application tracking system built as a
             full-stack learning and demonstration project.
           </Typography>
 
-          <Typography>
+          <Typography sx={{ mb: 2 }}>
             The goal of the project is to show practical understanding of a
             typical business application workflow: managing companies, job
             applications, application events, and contact persons through a
@@ -107,22 +107,45 @@ export default function DashboardPage() {
             Design decisions
           </Typography>
 
-          <Typography>
+          <Typography sx={{ mb: 2 }}>
             This project focuses on clarity, maintainability and practical
             workflow instead of unnecessary complexity.
           </Typography>
 
-          <Typography>
+          <Typography sx={{ mb: 2 }}>
             For the first version, client-side filtering was used because the
             dataset is small and the goal is to demonstrate the application
             flow. In a production system, filtering, sorting and pagination
             would usually be handled on the backend.
           </Typography>
 
-          <Typography>
+          <Typography sx={{ mb: 2 }}>
             Material UI was used to avoid spending too much time on custom
             styling and to focus mainly on application structure, REST API
             integration and business logic.
+          </Typography>
+
+          <Typography sx={{ mb: 2 }}>
+            The project intentionally prioritizes learning goals and
+            demonstration value over enterprise-level complexity.
+          </Typography>
+
+          <Typography sx={{ mb: 2 }}>
+            Advanced topics such as server-side filtering, pagination, caching,
+            authentication, authorization, performance optimization, monitoring,
+            logging and security hardening are intentionally kept out of scope
+            for the first version.
+          </Typography>
+
+          <Typography sx={{ mb: 2 }}>
+            The purpose of this project is to demonstrate understanding of
+            common full-stack development patterns and application architecture
+            rather than to provide a production-ready enterprise solution.
+          </Typography>
+
+          <Typography>
+            These areas would be natural candidates for future iterations of the
+            project.
           </Typography>
 
           <Divider sx={{ my: 3 }} />
