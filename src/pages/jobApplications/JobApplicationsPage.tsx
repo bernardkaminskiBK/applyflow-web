@@ -61,7 +61,7 @@ export default function JobApplicationsPage() {
   const [searchText, setSearchText] = useState("");
 
   const filteredApplications = applications.filter((application) =>
-    `${application.companyName} ${application.positionTitle} ${application.location ?? ""}`
+    `${application.companyName} ${application.positionTitle} ${application.appliedDate} ${application.location ?? ""}`
       .toLowerCase()
       .includes(searchText.toLowerCase()),
   );
