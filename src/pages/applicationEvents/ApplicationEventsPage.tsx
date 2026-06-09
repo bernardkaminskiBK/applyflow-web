@@ -52,7 +52,7 @@ export default function ApplicationEventsPage() {
   const [searchText, setSearchText] = useState("");
 
   const filteredApplications = events.filter((event) =>
-    `${event.companyName} ${event.positionTitle} ${event.eventDate ?? ""}`
+    `${event.companyName ?? ""} ${event.positionTitle ?? ""} ${event.eventDate ?? ""}`
       .toLowerCase()
       .includes(searchText.toLowerCase()),
   );

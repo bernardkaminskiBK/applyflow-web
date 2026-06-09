@@ -44,7 +44,7 @@ export default function CompaniesPage() {
   const [searchText, setSearchText] = useState("");
 
   const filteredCompanies = companies.filter((company) =>
-    `${company.name} ${company.city} ${company.website ?? ""}`
+    `${company.name ?? ""} ${company.city ?? ""} ${company.website ?? ""} ${company.note ?? ""}`
       .toLowerCase()
       .includes(searchText.toLowerCase()),
   );
