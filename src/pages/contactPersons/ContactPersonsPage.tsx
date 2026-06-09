@@ -12,20 +12,20 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import type { ContactPerson } from "../types/contactPerson/contactPerson";
-import type { Company } from "../types/company/company";
-import type { ContactPersonFormErrors } from "../types/contactPerson/ContactPersonFormErrors";
+import type { ContactPerson } from "../../types/contactPerson/contactPerson";
+import type { Company } from "../../types/company/company";
+import type { ContactPersonFormErrors } from "../../types/contactPerson/ContactPersonFormErrors";
 import {
   createContactPerson,
   deleteContactPerson,
   getContactPersons,
   updateContactPerson,
-} from "../api/contactPersonsApi";
-import { getCompanies } from "../api/companiesApi";
-import PageHeader from "../components/common/PageHeader";
-import SearchField from "../components/common/SearchField";
-import ConfirmDeleteDialog from "../components/common/ConfirmDeleteDialog";
-import ContactPersonFormDialog from "../components/contactPersons/ContactPersonFormDialog";
+} from "../../api/contactPersonsApi";
+import { getCompanies } from "../../api/companiesApi";
+import PageHeader from "../../components/common/PageHeader";
+import SearchField from "../../components/common/SearchField";
+import ConfirmDeleteDialog from "../../components/common/ConfirmDeleteDialog";
+import ContactPersonFormDialog from "../../components/contactPersons/ContactPersonFormDialog";
 
 export default function ContactPersonsPage() {
   const [contacts, setContacts] = useState<ContactPerson[]>([]);
