@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import ConfirmDeleteDialog from "../../components/common/ConfirmDeleteDialog";
 import type { ApplicationEvent } from "../../types/applicationEvent/applicationEvent";
 import type { ApplicationEventFormErrors } from "../../types/applicationEvent/applicationEventFormError";
@@ -179,10 +180,12 @@ export default function ApplicationEventsPage() {
                 <TableCell>{event.companyName}</TableCell>
                 <TableCell>{event.positionTitle}</TableCell>
                 <TableCell>
-                  <Chip
-                    label={getEventTypeText(event.eventType)}
-                    size="small"
-                  />
+                  <Link to={`/application-events/${event.id}`}>
+                    <Chip
+                      label={getEventTypeText(event.eventType)}
+                      size="small"
+                    />
+                  </Link>
                 </TableCell>
                 <TableCell>{event.eventDate}</TableCell>
                 <TableCell>{event.note}</TableCell>

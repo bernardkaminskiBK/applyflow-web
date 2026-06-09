@@ -7,6 +7,7 @@ import ApplicationEventsPage from "./pages/applicationEvents/ApplicationEventsPa
 import ContactPersonsPage from "./pages/ContactPersonsPage";
 import CompanyDetailsPage from "./pages/companies/CompanyDetailsPage";
 import JobApplicationDetailsPage from "./pages/jobApplications/JobApplicationDetailsPage";
+import ApplicationEventDetailsPage from "./pages/applicationEvents/ApplicationEventDetailsPage";
 
 export default function App() {
   return (
@@ -24,6 +25,10 @@ export default function App() {
           <Route
             path="/application-events"
             element={<ApplicationEventsPage />}
+          />
+          <Route
+            path="/application-events/:id"
+            element={<ApplicationEventDetailsPage />}
           />
           <Route path="/contact-persons" element={<ContactPersonsPage />} />
         </Routes>
