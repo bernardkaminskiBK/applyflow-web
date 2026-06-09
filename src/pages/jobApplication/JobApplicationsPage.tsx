@@ -28,6 +28,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  TextField,
   Typography,
 } from "@mui/material";
 
@@ -54,6 +55,14 @@ export default function JobApplicationsPage() {
 
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isFormDialogOpen, setIsFormDialogOpen] = useState(false);
+
+  const [searchText, setSearchText] = useState("");
+
+  const filteredApplications = applications.filter((application) =>
+    `${application.companyName} ${application.positionTitle} ${application.location ?? ""}`
+      .toLowerCase()
+      .includes(searchText.toLowerCase()),
+  );
 
   useEffect(() => {
     loadApplications();
@@ -177,6 +186,14 @@ export default function JobApplicationsPage() {
         </Button>
       </Box>
 
+      <TextField
+        label="Search"
+        value={searchText}
+        onChange={(event) => setSearchText(event.target.value)}
+        fullWidth
+        sx={{ mb: 3 }}
+      />
+
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
@@ -191,7 +208,7 @@ export default function JobApplicationsPage() {
           </TableHead>
 
           <TableBody>
-            {applications.map((application) => (
+            {filteredApplications.map((application) => (
               <TableRow key={application.id}>
                 <TableCell>
                   <Link to={`/job-applications/${application.id}`}>

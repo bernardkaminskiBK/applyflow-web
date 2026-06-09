@@ -15,6 +15,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  TextField,
   Typography,
 } from "@mui/material";
 import {
@@ -39,6 +40,14 @@ export default function CompaniesPage() {
 
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isFormDialogOpen, setIsFormDialogOpen] = useState(false);
+
+  const [searchText, setSearchText] = useState("");
+
+  const filteredCompanies = companies.filter((company) =>
+    `${company.name} ${company.city} ${company.website ?? ""}`
+      .toLowerCase()
+      .includes(searchText.toLowerCase()),
+  );
 
   useEffect(() => {
     loadCompanies();
@@ -142,6 +151,14 @@ export default function CompaniesPage() {
         </Button>
       </Box>
 
+      <TextField
+        label="Search"
+        value={searchText}
+        onChange={(event) => setSearchText(event.target.value)}
+        fullWidth
+        sx={{ mb: 3 }}
+      />
+
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
@@ -155,7 +172,7 @@ export default function CompaniesPage() {
           </TableHead>
 
           <TableBody>
-            {companies.map((company) => (
+            {filteredCompanies.map((company) => (
               <TableRow key={company.id}>
                 <TableCell>
                   <Link to={`/companies/${company.id}`}>{company.name}</Link>
