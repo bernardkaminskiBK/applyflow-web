@@ -5,6 +5,7 @@ import ConfirmDeleteDialog from "../../components/common/ConfirmDeleteDialog";
 import type { JobApplicationFormErrors } from "../../types/JobApplication/jobApplicationErrors";
 import JobApplicationFormDialog from "../../components/jobApplications/JobApplicationFormDialog";
 import {
+  getSourceText,
   getStatusInfo,
   getWorkModeText,
 } from "../../utils/jobApplicationHelpers";
@@ -41,6 +42,7 @@ export default function JobApplicationsPage() {
   const [companyId, setCompanyId] = useState("");
   const [workMode, setWorkMode] = useState("0");
   const [status, setStatus] = useState("1");
+  const [source, setSource] = useState("0");
   const [positionTitle, setPositionTitle] = useState("");
   const [location, setLocation] = useState("");
   const [salaryMin, setSalaryMin] = useState("");
@@ -83,6 +85,7 @@ export default function JobApplicationsPage() {
     setCompanyId("");
     setWorkMode("0");
     setStatus("1");
+    setSource("0");
     setPositionTitle("");
     setLocation("");
     setSalaryMin("");
@@ -102,6 +105,7 @@ export default function JobApplicationsPage() {
     setCompanyId(application.companyId.toString());
     setWorkMode(application.workMode.toString());
     setStatus(application.status.toString());
+    setSource(application.source.toString());
     setPositionTitle(application.positionTitle);
     setLocation(application.location || "");
     setSalaryMin(application.salaryMin?.toString() || "");
@@ -128,7 +132,7 @@ export default function JobApplicationsPage() {
         location,
         workMode: Number(workMode),
         status: Number(status),
-        source: 0,
+        source: Number(source),
         appliedDate: new Date().toISOString().split("T")[0],
         salaryMin: salaryMin ? Number(salaryMin) : null,
         salaryMax: salaryMax ? Number(salaryMax) : null,
@@ -202,6 +206,7 @@ export default function JobApplicationsPage() {
               <TableCell sx={{ fontWeight: "bold" }}>Position</TableCell>
               <TableCell sx={{ fontWeight: "bold" }}>Status</TableCell>
               <TableCell sx={{ fontWeight: "bold" }}>Work Mode</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>Source</TableCell>
               <TableCell sx={{ fontWeight: "bold" }}>Applied Date</TableCell>
               <TableCell sx={{ fontWeight: "bold" }}>Actions</TableCell>
             </TableRow>
@@ -223,8 +228,9 @@ export default function JobApplicationsPage() {
                     variant="filled"
                   />
                 </TableCell>
+                <TableCell>{getWorkModeText(application.workMode)}</TableCell>
                 <TableCell sx={{ fontWeight: "bold" }}>
-                  {getWorkModeText(application.workMode)}
+                  {getSourceText(application.source)}
                 </TableCell>
                 <TableCell>{application.appliedDate}</TableCell>
                 <TableCell>
@@ -260,6 +266,7 @@ export default function JobApplicationsPage() {
         companies={companies}
         workMode={workMode}
         status={status}
+        source={source}
         positionTitle={positionTitle}
         location={location}
         salaryMin={salaryMin}
@@ -269,6 +276,7 @@ export default function JobApplicationsPage() {
         onCompanyIdChange={setCompanyId}
         onWorkModeChange={setWorkMode}
         onStatusChange={setStatus}
+        onSourceChange={setSource}
         onPositionTitleChange={setPositionTitle}
         onLocationChange={setLocation}
         onSalaryMinChange={setSalaryMin}

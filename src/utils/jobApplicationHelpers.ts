@@ -61,3 +61,20 @@ export function getWorkModeText(workMode: number): string {
       return "Unknown";
   }
 }
+
+export function getSourceText(workMode: number): string {
+  switch (workMode) {
+    case 0:
+      return "Profesia";
+    case 1:
+      return "LinkedIn";
+    case 2:
+      return "CompanyWebsite";
+    case 3:
+      return "Referral";
+    case 4:
+      return "Other";
+    default:
+      return "Unknown";
+  }
+}

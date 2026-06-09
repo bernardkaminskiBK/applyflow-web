@@ -22,6 +22,7 @@ type JobApplicationFormDialogProps = {
   companies: Company[];
   workMode: string;
   status: string;
+  source: string;
   positionTitle: string;
   location: string;
   salaryMin: string;
@@ -33,6 +34,7 @@ type JobApplicationFormDialogProps = {
   onCompanyIdChange: (value: string) => void;
   onWorkModeChange: (value: string) => void;
   onStatusChange: (value: string) => void;
+  onSourceChange: (value: string) => void;
   onPositionTitleChange: (value: string) => void;
   onLocationChange: (value: string) => void;
   onSalaryMinChange: (value: string) => void;
@@ -50,6 +52,7 @@ export default function JobApplicationFormDialog({
   companies,
   workMode,
   status,
+  source,
   positionTitle,
   location,
   salaryMin,
@@ -59,6 +62,7 @@ export default function JobApplicationFormDialog({
   onCompanyIdChange,
   onWorkModeChange,
   onStatusChange,
+  onSourceChange,
   onPositionTitleChange,
   onLocationChange,
   onSalaryMinChange,
@@ -113,6 +117,22 @@ export default function JobApplicationFormDialog({
             <MenuItem value="0">Onsite</MenuItem>
             <MenuItem value="1">Hybrid</MenuItem>
             <MenuItem value="2">Remote</MenuItem>
+          </Select>
+        </FormControl>
+
+        <FormControl fullWidth margin="normal">
+          <InputLabel>Source</InputLabel>
+
+          <Select
+            label="Source"
+            value={source}
+            onChange={(event) => onSourceChange(event.target.value)}
+          >
+            <MenuItem value="0">Profesia</MenuItem>
+            <MenuItem value="1">LinkedIn</MenuItem>
+            <MenuItem value="2">CompanyWebsite</MenuItem>
+            <MenuItem value="3">Referral</MenuItem>
+            <MenuItem value="4">Other</MenuItem>
           </Select>
         </FormControl>
 
