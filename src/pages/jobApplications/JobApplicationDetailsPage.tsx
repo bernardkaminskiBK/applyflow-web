@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getJobApplicationById } from "../../api/jobApplicationsApi";
 import type { JobApplication } from "../../types/JobApplication/jobApplication";
+import DetailRow from "../../components/common/DetailRow";
 import {
   Box,
   Button,
@@ -72,27 +73,6 @@ export default function JobApplicationDetailsPage() {
           </Stack>
         </CardContent>
       </Card>
-    </Box>
-  );
-}
-
-type DetailRowProps = {
-  label: string;
-  value?: string;
-};
-
-function DetailRow({ label, value }: DetailRowProps) {
-  return (
-    <Box>
-      <Typography
-        sx={{ fontWeight: "bold" }}
-        variant="subtitle2"
-        color="text.secondary"
-      >
-        {label}
-      </Typography>
-
-      <Typography variant="body1">{value || "-"}</Typography>
     </Box>
   );
 }

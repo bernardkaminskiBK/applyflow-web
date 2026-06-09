@@ -15,8 +15,6 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  TextField,
-  Typography,
 } from "@mui/material";
 import {
   createCompany,
@@ -24,6 +22,8 @@ import {
   getCompanies,
   updateCompany,
 } from "../../api/companiesApi";
+import SearchField from "../../components/common/SearchField";
+import PageHeader from "../../components/common/PageHeader";
 
 export default function CompaniesPage() {
   const [companies, setCompanies] = useState<Company[]>([]);
@@ -137,26 +137,16 @@ export default function CompaniesPage() {
 
   return (
     <Box>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          mb: 3,
-        }}
-      >
-        <Typography variant="h4">Companies</Typography>
+      <PageHeader
+        title="Companies"
+        buttonText="Add Company"
+        onButtonClick={openCreateDialog}
+      />
 
-        <Button variant="contained" onClick={openCreateDialog}>
-          Add Company
-        </Button>
-      </Box>
-
-      <TextField
-        label="Search"
+      <SearchField
+        label="Search Companies"
         value={searchText}
-        onChange={(event) => setSearchText(event.target.value)}
-        fullWidth
-        sx={{ mb: 3 }}
+        onChange={setSearchText}
       />
 
       <TableContainer component={Paper}>

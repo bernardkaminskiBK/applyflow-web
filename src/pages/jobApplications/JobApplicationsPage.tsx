@@ -4,6 +4,7 @@ import type { JobApplication } from "../../types/JobApplication/jobApplication";
 import ConfirmDeleteDialog from "../../components/common/ConfirmDeleteDialog";
 import type { JobApplicationFormErrors } from "../../types/JobApplication/jobApplicationErrors";
 import JobApplicationFormDialog from "../../components/jobApplications/JobApplicationFormDialog";
+import SearchField from "../../components/common/SearchField";
 import {
   getSourceText,
   getStatusInfo,
@@ -29,9 +30,8 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  TextField,
-  Typography,
 } from "@mui/material";
+import PageHeader from "../../components/common/PageHeader";
 
 export default function JobApplicationsPage() {
   const [applications, setApplications] = useState<JobApplication[]>([]);
@@ -176,26 +176,16 @@ export default function JobApplicationsPage() {
 
   return (
     <Box>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          mb: 3,
-        }}
-      >
-        <Typography variant="h4">Job Applications</Typography>
+      <PageHeader
+        title="Job Applications"
+        buttonText="Add Application"
+        onButtonClick={openCreateDialog}
+      />
 
-        <Button variant="contained" onClick={openCreateDialog}>
-          Add Application
-        </Button>
-      </Box>
-
-      <TextField
-        label="Search"
+      <SearchField
+        label="Search Job Applications"
         value={searchText}
-        onChange={(event) => setSearchText(event.target.value)}
-        fullWidth
-        sx={{ mb: 3 }}
+        onChange={setSearchText}
       />
 
       <TableContainer component={Paper}>

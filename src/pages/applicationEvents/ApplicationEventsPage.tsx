@@ -17,9 +17,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Typography,
   Chip,
-  TextField,
 } from "@mui/material";
 import {
   createApplicationEvent,
@@ -27,6 +25,8 @@ import {
   getApplicationEvents,
   updateApplicationEvent,
 } from "../../api/applicationEventsApi";
+import SearchField from "../../components/common/SearchField";
+import PageHeader from "../../components/common/PageHeader";
 
 export default function ApplicationEventsPage() {
   const [events, setEvents] = useState<ApplicationEvent[]>([]);
@@ -148,20 +148,16 @@ export default function ApplicationEventsPage() {
 
   return (
     <Box>
-      <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}>
-        <Typography variant="h4">Application Events</Typography>
+      <PageHeader
+        title="Application Events"
+        buttonText="Add Event"
+        onButtonClick={openCreateDialog}
+      />
 
-        <Button variant="contained" onClick={openCreateDialog}>
-          Add Event
-        </Button>
-      </Box>
-
-      <TextField
-        label="Search"
+      <SearchField
+        label="Search Application Events"
         value={searchText}
-        onChange={(event) => setSearchText(event.target.value)}
-        fullWidth
-        sx={{ mb: 3 }}
+        onChange={setSearchText}
       />
 
       <TableContainer component={Paper}>
@@ -198,7 +194,6 @@ export default function ApplicationEventsPage() {
                     >
                       Edit
                     </Button>
-
                     <Button
                       color="error"
                       variant="outlined"

@@ -10,6 +10,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
+import DetailRow from "../../components/common/DetailRow";
 
 export default function CompanyDetailsPage() {
   const [company, setCompany] = useState<Company | null>(null);
@@ -54,27 +55,6 @@ export default function CompanyDetailsPage() {
           </Stack>
         </CardContent>
       </Card>
-    </Box>
-  );
-}
-
-type DetailRowProps = {
-  label: string;
-  value?: string;
-};
-
-function DetailRow({ label, value }: DetailRowProps) {
-  return (
-    <Box>
-      <Typography
-        sx={{ fontWeight: "bold" }}
-        variant="subtitle2"
-        color="text.secondary"
-      >
-        {label}
-      </Typography>
-
-      <Typography variant="body1">{value || "-"}</Typography>
     </Box>
   );
 }
