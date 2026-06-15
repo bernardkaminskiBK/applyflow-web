@@ -4,6 +4,7 @@ import {
   Button,
   Card,
   CardContent,
+  CircularProgress,
   Divider,
   Grid,
   List,
@@ -16,6 +17,7 @@ import { getCompanies } from "../api/companiesApi";
 import { getJobApplications } from "../api/jobApplicationsApi";
 import { getApplicationEvents } from "../api/applicationEventsApi";
 import { getContactPersons } from "../api/contactPersonsApi";
+import ErrorSnackbar from "../components/common/ErrorSnackbar";
 
 export default function DashboardPage() {
   const [companyCount, setCompanyCount] = useState(0);
@@ -23,8 +25,17 @@ export default function DashboardPage() {
   const [eventCount, setEventCount] = useState(0);
   const [contactCount, setContactCount] = useState(0);
 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
   useEffect(() => {
-    async function loadDashboardData() {
+    loadDashboardData();
+  }, []);
+
+  async function loadDashboardData() {
+    try {
+      setLoading(true);
+
       const [companies, applications, events, contacts] = await Promise.all([
         getCompanies(),
         getJobApplications(),
@@ -36,10 +47,28 @@ export default function DashboardPage() {
       setApplicationCount(applications.length);
       setEventCount(events.length);
       setContactCount(contacts.length);
+    } catch (error) {
+      console.error(error);
+      setError("Companies could not be loaded.");
+    } finally {
+      setLoading(false);
     }
+  }
 
-    loadDashboardData();
-  }, []);
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "300px",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <>
@@ -55,7 +84,6 @@ export default function DashboardPage() {
           <DashboardCard title="Contact Persons" value={contactCount} />
         </Grid>
       </Box>
-
       <Card sx={{ mt: 4 }}>
         <CardContent>
           <Typography variant="h5" gutterBottom>
@@ -176,6 +204,11 @@ export default function DashboardPage() {
           </Typography>
         </CardContent>
       </Card>
+      <ErrorSnackbar
+        open={Boolean(error)}
+        message={error}
+        onClose={() => setError("")}
+      />
     </>
   );
 }
