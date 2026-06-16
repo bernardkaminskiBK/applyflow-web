@@ -14,7 +14,7 @@ export function useDashboard() {
   });
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     loadDashboardData();
@@ -22,7 +22,7 @@ export function useDashboard() {
 
   async function loadDashboardData() {
     setLoading(true);
-    setError("");
+    setError(null);
 
     Promise.all([
       getCompanies(),
@@ -50,7 +50,7 @@ export function useDashboard() {
     stats,
     loading,
     error,
-    clearError: () => setError(""),
+    clearError: () => setError(null),
     reload: loadDashboardData,
   };
 }

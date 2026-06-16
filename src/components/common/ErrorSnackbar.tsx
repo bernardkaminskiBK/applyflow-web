@@ -3,7 +3,7 @@ import Snackbar from "@mui/material/Snackbar";
 
 type ErrorSnackBarProps = {
   open: boolean;
-  message: string;
+  message: string | null;
   onClose: () => void;
 };
 
