@@ -6,20 +6,15 @@ import {
   DialogTitle,
   TextField,
 } from "@mui/material";
-import type { CompanyFormErrors } from "../../types/company/companyFormErrors";
+import type { CompanyFormErrors } from "../models/companyFormErrors";
+import type { CompanyFormValues } from "../models/companyFormValues";
 
 type CompanyFormDialogProps = {
   open: boolean;
   title: string;
-  name: string;
-  city: string;
-  website: string;
-  note: string;
+  form: CompanyFormValues;
   errors: CompanyFormErrors;
-  onNameChange: (value: string) => void;
-  onCityChange: (value: string) => void;
-  onWebsiteChange: (value: string) => void;
-  onNoteChange: (value: string) => void;
+  onChange: (field: keyof CompanyFormValues, value: string) => void;
   onClose: () => void;
   onSave: () => void;
 };
@@ -27,15 +22,9 @@ type CompanyFormDialogProps = {
 export default function CompanyFormDialog({
   open,
   title,
-  name,
-  city,
-  website,
-  note,
+  form,
   errors,
-  onNameChange,
-  onCityChange,
-  onWebsiteChange,
-  onNoteChange,
+  onChange,
   onClose,
   onSave,
 }: CompanyFormDialogProps) {
@@ -46,8 +35,8 @@ export default function CompanyFormDialog({
       <DialogContent>
         <TextField
           label="Name"
-          value={name}
-          onChange={(e) => onNameChange(e.target.value)}
+          value={form.name}
+          onChange={(e) => onChange("name", e.target.value)}
           error={Boolean(errors.name)}
           helperText={errors.name}
           fullWidth
@@ -56,8 +45,8 @@ export default function CompanyFormDialog({
 
         <TextField
           label="City"
-          value={city}
-          onChange={(e) => onCityChange(e.target.value)}
+          value={form.city}
+          onChange={(e) => onChange("city", e.target.value)}
           error={Boolean(errors.city)}
           helperText={errors.city}
           fullWidth
@@ -66,8 +55,8 @@ export default function CompanyFormDialog({
 
         <TextField
           label="Website"
-          value={website}
-          onChange={(e) => onWebsiteChange(e.target.value)}
+          value={form.website}
+          onChange={(e) => onChange("website", e.target.value)}
           error={Boolean(errors.website)}
           helperText={errors.website}
           fullWidth
@@ -76,8 +65,8 @@ export default function CompanyFormDialog({
 
         <TextField
           label="Note"
-          value={note}
-          onChange={(e) => onNoteChange(e.target.value)}
+          value={form.note}
+          onChange={(e) => onChange("note", e.target.value)}
           error={Boolean(errors.note)}
           helperText={errors.note}
           fullWidth

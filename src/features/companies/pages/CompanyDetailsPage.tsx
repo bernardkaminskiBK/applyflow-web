@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import type { Company } from "../../types/company/company";
-import { getCompanyById } from "../../api/companiesApi";
 import {
   Box,
   Button,
@@ -10,7 +8,9 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import DetailRow from "../../components/common/DetailRow";
+import DetailRow from "../../../components/common/DetailRow";
+import type { Company } from "../models/company";
+import { getCompanyById } from "../../../api/companiesApi";
 
 export default function CompanyDetailsPage() {
   const [company, setCompany] = useState<Company | null>(null);
