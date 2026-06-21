@@ -1,5 +1,4 @@
-import type { Company } from "../../features/companies/models/company";
-import type { JobApplicationFormErrors } from "../../types/JobApplication/jobApplicationErrors";
+import type { JobApplicationFormErrors } from "../models/jobApplicationErrors";
 import {
   Button,
   Dialog,
@@ -7,40 +6,24 @@ import {
   DialogContent,
   DialogTitle,
   FormControl,
+  FormHelperText,
   InputLabel,
   MenuItem,
   Select,
   TextField,
   Typography,
 } from "@mui/material";
+import type { JobApplicationFormValues } from "../models/jobApplicationFormValues";
+import { useCompaniesLookup } from "../../../shared/hooks/useCompaniesLookup";
+import { useEffect } from "react";
+import ErrorSnackbar from "../../../components/common/ErrorSnackbar";
 
 type JobApplicationFormDialogProps = {
   open: boolean;
   title: string;
-
-  companyId: string;
-  companies: Company[];
-  workMode: string;
-  status: string;
-  source: string;
-  positionTitle: string;
-  location: string;
-  salaryMin: string;
-  salaryMax: string;
-  note: string;
-
+  form: JobApplicationFormValues;
   errors: JobApplicationFormErrors;
-
-  onCompanyIdChange: (value: string) => void;
-  onWorkModeChange: (value: string) => void;
-  onStatusChange: (value: string) => void;
-  onSourceChange: (value: string) => void;
-  onPositionTitleChange: (value: string) => void;
-  onLocationChange: (value: string) => void;
-  onSalaryMinChange: (value: string) => void;
-  onSalaryMaxChange: (value: string) => void;
-  onNoteChange: (value: string) => void;
-
+  onChange: (field: keyof JobApplicationFormValues, value: string) => void;
   onClose: () => void;
   onSave: () => void;
 };
@@ -48,29 +31,26 @@ type JobApplicationFormDialogProps = {
 export default function JobApplicationFormDialog({
   open,
   title,
-  companyId,
-  companies,
-  workMode,
-  status,
-  source,
-  positionTitle,
-  location,
-  salaryMin,
-  salaryMax,
-  note,
   errors,
-  onCompanyIdChange,
-  onWorkModeChange,
-  onStatusChange,
-  onSourceChange,
-  onPositionTitleChange,
-  onLocationChange,
-  onSalaryMinChange,
-  onSalaryMaxChange,
-  onNoteChange,
+  form,
+  onChange,
   onClose,
   onSave,
 }: JobApplicationFormDialogProps) {
+  const {
+    companies,
+    loadingCompanies,
+    companyError,
+    loadCompanies,
+    clearCompanyError,
+  } = useCompaniesLookup();
+
+  useEffect(() => {
+    if (open) {
+      loadCompanies();
+    }
+  }, [open]);
+
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
       <DialogTitle>{title}</DialogTitle>
@@ -85,8 +65,11 @@ export default function JobApplicationFormDialog({
 
           <Select
             label="Company"
-            value={companyId}
-            onChange={(event) => onCompanyIdChange(event.target.value)}
+            value={form.companyId}
+            disabled={loadingCompanies}
+            onChange={(event) =>
+              onChange("companyId", event.target.value.toString())
+            }
           >
             {companies.map((company) => (
               <MenuItem key={company.id} value={company.id.toString()}>
@@ -94,6 +77,10 @@ export default function JobApplicationFormDialog({
               </MenuItem>
             ))}
           </Select>
+
+          <FormHelperText>
+            {loadingCompanies && "Loading companies..."}
+          </FormHelperText>
 
           {errors.companyId && (
             <Typography
@@ -111,8 +98,10 @@ export default function JobApplicationFormDialog({
 
           <Select
             label="Work Mode"
-            value={workMode}
-            onChange={(event) => onWorkModeChange(event.target.value)}
+            value={form.workMode}
+            onChange={(event) =>
+              onChange("workMode", event.target.value.toString())
+            }
           >
             <MenuItem value="0">Onsite</MenuItem>
             <MenuItem value="1">Hybrid</MenuItem>
@@ -125,8 +114,10 @@ export default function JobApplicationFormDialog({
 
           <Select
             label="Source"
-            value={source}
-            onChange={(event) => onSourceChange(event.target.value)}
+            value={form.source}
+            onChange={(event) =>
+              onChange("source", event.target.value.toString())
+            }
           >
             <MenuItem value="0">Profesia</MenuItem>
             <MenuItem value="1">LinkedIn</MenuItem>
@@ -141,8 +132,10 @@ export default function JobApplicationFormDialog({
 
           <Select
             label="Status"
-            value={status}
-            onChange={(event) => onStatusChange(event.target.value)}
+            value={form.status}
+            onChange={(event) =>
+              onChange("status", event.target.value.toString())
+            }
           >
             <MenuItem value="0">Draft</MenuItem>
             <MenuItem value="1">Applied</MenuItem>
@@ -155,8 +148,8 @@ export default function JobApplicationFormDialog({
 
         <TextField
           label="Position Title"
-          value={positionTitle}
-          onChange={(event) => onPositionTitleChange(event.target.value)}
+          value={form.positionTitle}
+          onChange={(event) => onChange("positionTitle", event.target.value)}
           error={Boolean(errors.positionTitle)}
           helperText={errors.positionTitle}
           fullWidth
@@ -165,8 +158,8 @@ export default function JobApplicationFormDialog({
 
         <TextField
           label="Location"
-          value={location}
-          onChange={(event) => onLocationChange(event.target.value)}
+          value={form.location}
+          onChange={(event) => onChange("location", event.target.value)}
           error={Boolean(errors.location)}
           helperText={errors.location}
           fullWidth
@@ -175,8 +168,8 @@ export default function JobApplicationFormDialog({
 
         <TextField
           label="Salary Min"
-          value={salaryMin}
-          onChange={(event) => onSalaryMinChange(event.target.value)}
+          value={form.salaryMin}
+          onChange={(event) => onChange("salaryMin", event.target.value)}
           error={Boolean(errors.salaryMin)}
           helperText={errors.salaryMin}
           fullWidth
@@ -185,8 +178,8 @@ export default function JobApplicationFormDialog({
 
         <TextField
           label="Salary Max"
-          value={salaryMax}
-          onChange={(event) => onSalaryMaxChange(event.target.value)}
+          value={form.salaryMax}
+          onChange={(event) => onChange("salaryMax", event.target.value)}
           error={Boolean(errors.salaryMax)}
           helperText={errors.salaryMax}
           fullWidth
@@ -195,8 +188,8 @@ export default function JobApplicationFormDialog({
 
         <TextField
           label="Note"
-          value={note}
-          onChange={(event) => onNoteChange(event.target.value)}
+          value={form.note}
+          onChange={(event) => onChange("note", event.target.value)}
           error={Boolean(errors.note)}
           helperText={errors.note}
           fullWidth
@@ -213,6 +206,12 @@ export default function JobApplicationFormDialog({
           Save
         </Button>
       </DialogActions>
+
+      <ErrorSnackbar
+        open={Boolean(companyError)}
+        message={companyError}
+        onClose={clearCompanyError}
+      />
     </Dialog>
   );
 }

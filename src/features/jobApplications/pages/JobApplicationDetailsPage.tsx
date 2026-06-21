@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getJobApplicationById } from "../../api/jobApplicationsApi";
-import type { JobApplication } from "../../types/JobApplication/jobApplication";
-import DetailRow from "../../components/common/DetailRow";
+import { getJobApplicationById } from "../../../api/jobApplicationsApi";
+import type { JobApplication } from "../models/jobApplication";
+import DetailRow from "../../../components/common/DetailRow";
 import {
   Box,
   Button,
@@ -14,7 +14,8 @@ import {
 import {
   getStatusInfo,
   getWorkModeText,
-} from "../../utils/jobApplicationHelpers";
+} from "../../../utils/jobApplicationHelpers";
+import LoadingSpinner from "../../../components/common/LoadingSpinner";
 
 export default function JobApplicationDetailsPage() {
   const { id } = useParams();
@@ -34,7 +35,7 @@ export default function JobApplicationDetailsPage() {
   }, [id]);
 
   if (!application) {
-    return <Typography>Loading...</Typography>;
+    return <LoadingSpinner />;
   }
 
   const statusInfo = getStatusInfo(application.status);
