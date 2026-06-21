@@ -51,8 +51,6 @@ export default function CompaniesPage() {
       .includes(searchText.toLowerCase()),
   );
 
-  const columns = createCompanyColumns(openEditDialog, openDeleteDialog);
-
   async function handleSaveCompany() {
     await saveCompany(form, editingCompany, setErrors, closeFormDialog);
   }
@@ -81,7 +79,7 @@ export default function CompaniesPage() {
 
       <DataGrid
         rows={filteredCompanies}
-        columns={columns}
+        columns={createCompanyColumns(openEditDialog, openDeleteDialog)}
         loading={loading}
         pageSizeOptions={[5, 10, 25]}
         initialState={{
