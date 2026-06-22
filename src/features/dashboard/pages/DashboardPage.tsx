@@ -1,10 +1,10 @@
 import { Box, Grid, Typography } from "@mui/material";
 
-import ErrorSnackbar from "../../components/common/ErrorSnackbar";
-import DashboardContent from "../../components/Dashboard/DashboardContent";
-import DashboardCard from "../../components/Dashboard/DashboardCard";
-import LoadingSpinner from "../../components/common/LoadingSpinner";
-import { useDashboard } from "./useDashboard";
+import ErrorSnackbar from "../../../components/common/ErrorSnackbar";
+import DashboardContent from "../components/DashboardContent";
+import DashboardCard from "../components/DashboardCard";
+import LoadingSpinner from "../../../components/common/LoadingSpinner";
+import { useDashboard } from "../hooks/useDashboard";
 
 export default function DashboardPage() {
   const { stats, loading, error, clearError } = useDashboard();

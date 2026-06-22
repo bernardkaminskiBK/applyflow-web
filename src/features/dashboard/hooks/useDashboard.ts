@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { getApplicationEvents } from "../../api/applicationEventsApi";
-import { getContactPersons } from "../../api/contactPersonsApi";
-import { getJobApplications } from "../../api/jobApplicationsApi";
-import type { DashboardStats } from "../../types/dashboard/DashboardStats";
-import { getCompanies } from "../../api/companiesApi";
+import { getApplicationEvents } from "../../../api/applicationEventsApi";
+import { getCompanies } from "../../../api/companiesApi";
+import { getContactPersons } from "../../../api/contactPersonsApi";
+import { getJobApplications } from "../../../api/jobApplicationsApi";
+import type { DashboardStats } from "../models/DashboardStats";
 
 export function useDashboard() {
   const [stats, setStats] = useState<DashboardStats>({

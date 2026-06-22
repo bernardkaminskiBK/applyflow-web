@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import AppLayout from "./components/layout/AppLayout";
-import DashboardPage from "./pages/dashboard/DashboardPage";
+import DashboardPage from "./features/dashboard/pages/DashboardPage";
 import ApplicationEventsPage from "./pages/applicationEvents/ApplicationEventsPage";
 import ContactPersonsPage from "./pages/contactPersons/ContactPersonsPage";
 import JobApplicationDetailsPage from "./features/jobApplications/pages/JobApplicationDetailsPage";
