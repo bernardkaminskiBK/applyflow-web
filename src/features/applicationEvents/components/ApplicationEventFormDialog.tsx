@@ -123,6 +123,8 @@ export default function ApplicationEventFormDialog({
           type="date"
           value={form.eventDate}
           onChange={(event) => onChange("eventDate", event.target.value)}
+          error={Boolean(errors.eventDate)}
+          helperText={errors.eventDate}
           fullWidth
           margin="normal"
         />

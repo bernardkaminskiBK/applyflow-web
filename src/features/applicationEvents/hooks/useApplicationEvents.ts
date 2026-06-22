@@ -68,6 +68,7 @@ export function useApplicationEvents() {
       if (validationErrors) {
         onValidationError({
           jobApplicationId: validationErrors?.JobApplicationId?.[0],
+          eventDate: validationErrors?.request?.[0],
           note: validationErrors?.Note?.[0],
         });
         return;
