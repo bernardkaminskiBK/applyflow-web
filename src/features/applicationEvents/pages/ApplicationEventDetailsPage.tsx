@@ -9,10 +9,11 @@ import {
   Typography,
 } from "@mui/material";
 
-import { getApplicationEventById } from "../../api/applicationEventsApi";
-import type { ApplicationEvent } from "../../types/applicationEvent/applicationEvent";
-import { getEventTypeText } from "../../utils/applicationEventHelpers";
-import DetailRow from "../../components/common/DetailRow";
+import { getApplicationEventById } from "../../../api/applicationEventsApi";
+import type { ApplicationEvent } from "../models/applicationEvent";
+import { getEventTypeText } from "../utils/applicationEventHelpers";
+import DetailRow from "../../../components/common/DetailRow";
+import LoadingSpinner from "../../../components/common/LoadingSpinner";
 
 export default function ApplicationEventDetailsPage() {
   const { id } = useParams();
@@ -32,7 +33,7 @@ export default function ApplicationEventDetailsPage() {
   }, [id]);
 
   if (!event) {
-    return <Typography>Loading...</Typography>;
+    return <LoadingSpinner />;
   }
 
   return (

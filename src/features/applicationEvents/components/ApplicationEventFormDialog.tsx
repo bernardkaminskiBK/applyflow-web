@@ -5,6 +5,7 @@ import {
   DialogContent,
   DialogTitle,
   FormControl,
+  FormHelperText,
   InputLabel,
   MenuItem,
   Select,
@@ -12,27 +13,21 @@ import {
   Typography,
 } from "@mui/material";
 
-import type { ApplicationEventFormErrors } from "../../types/applicationEvent/applicationEventFormError";
-import type { JobApplication } from "../../features/jobApplications/models/jobApplication";
+import { useEffect } from "react";
+import type { ApplicationEventFormValues } from "../models/applicationEventFormValues";
+import type { ApplicationEventFormErrors } from "../models/applicationEventFormError";
+import ErrorSnackbar from "../../../components/common/ErrorSnackbar";
+import { useJobApplicationsLookup } from "../../../shared/hooks/useApplicationEventsLookup";
 
 type ApplicationEventFormDialogProps = {
   open: boolean;
   title: string;
-
-  jobApplications: JobApplication[];
-
-  jobApplicationId: string;
-  eventType: string;
-  eventDate: string;
-  note: string;
-
+  form: ApplicationEventFormValues;
   errors: ApplicationEventFormErrors;
-
-  onJobApplicationIdChange: (value: string) => void;
-  onEventTypeChange: (value: string) => void;
-  onEventDateChange: (value: string) => void;
-  onNoteChange: (value: string) => void;
-
+  onChange: (
+    field: keyof ApplicationEventFormValues,
+    value: string | number,
+  ) => void;
   onClose: () => void;
   onSave: () => void;
 };
@@ -40,19 +35,26 @@ type ApplicationEventFormDialogProps = {
 export default function ApplicationEventFormDialog({
   open,
   title,
-  jobApplications,
-  jobApplicationId,
-  eventType,
-  eventDate,
-  note,
+  form,
   errors,
-  onJobApplicationIdChange,
-  onEventTypeChange,
-  onEventDateChange,
-  onNoteChange,
+  onChange,
   onClose,
   onSave,
 }: ApplicationEventFormDialogProps) {
+  const {
+    jobApplications,
+    loadingJobApplications,
+    jobApplicationError,
+    loadJobApplications,
+    clearJobApplicationError,
+  } = useJobApplicationsLookup();
+
+  useEffect(() => {
+    if (open) {
+      loadJobApplications();
+    }
+  }, [open]);
+
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
       <DialogTitle>{title}</DialogTitle>
@@ -67,8 +69,11 @@ export default function ApplicationEventFormDialog({
 
           <Select
             label="Job Application"
-            value={jobApplicationId}
-            onChange={(event) => onJobApplicationIdChange(event.target.value)}
+            value={form.jobApplicationId}
+            disabled={loadingJobApplications}
+            onChange={(event) =>
+              onChange("jobApplicationId", event.target.value.toString())
+            }
           >
             {jobApplications.map((application) => (
               <MenuItem key={application.id} value={application.id.toString()}>
@@ -76,6 +81,10 @@ export default function ApplicationEventFormDialog({
               </MenuItem>
             ))}
           </Select>
+
+          <FormHelperText>
+            {loadingJobApplications && "Loading job applications..."}
+          </FormHelperText>
 
           {errors.jobApplicationId && (
             <Typography
@@ -93,8 +102,10 @@ export default function ApplicationEventFormDialog({
 
           <Select
             label="Event Type"
-            value={eventType}
-            onChange={(event) => onEventTypeChange(event.target.value)}
+            value={form.eventType}
+            onChange={(event) =>
+              onChange("eventType", Number(event.target.value))
+            }
           >
             <MenuItem value="0">Applied</MenuItem>
             <MenuItem value="1">Phone Screen</MenuItem>
@@ -110,16 +121,16 @@ export default function ApplicationEventFormDialog({
         <TextField
           label="Event Date"
           type="date"
-          value={eventDate}
-          onChange={(event) => onEventDateChange(event.target.value)}
+          value={form.eventDate}
+          onChange={(event) => onChange("eventDate", event.target.value)}
           fullWidth
           margin="normal"
         />
 
         <TextField
           label="Note"
-          value={note}
-          onChange={(event) => onNoteChange(event.target.value)}
+          value={form.note}
+          onChange={(event) => onChange("note", event.target.value)}
           error={Boolean(errors.note)}
           helperText={errors.note}
           fullWidth
@@ -136,6 +147,12 @@ export default function ApplicationEventFormDialog({
           Save
         </Button>
       </DialogActions>
+
+      <ErrorSnackbar
+        open={Boolean(jobApplicationError)}
+        message={jobApplicationError}
+        onClose={clearJobApplicationError}
+      />
     </Dialog>
   );
 }
