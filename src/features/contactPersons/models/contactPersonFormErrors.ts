@@ -3,5 +3,5 @@ export type ContactPersonFormErrors = {
   name?: string;
   position?: string;
   email?: string;
-  phone?: string;
+  phoneNumber?: string;
 };

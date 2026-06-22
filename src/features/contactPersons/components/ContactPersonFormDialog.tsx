@@ -1,40 +1,32 @@
 import {
-  Button,
   Dialog,
-  DialogActions,
-  DialogContent,
   DialogTitle,
+  DialogContent,
   FormControl,
   InputLabel,
-  MenuItem,
   Select,
-  TextField,
+  MenuItem,
+  FormHelperText,
   Typography,
+  TextField,
+  DialogActions,
+  Button,
 } from "@mui/material";
-
-import type { Company } from "../../features/companies/models/company";
-import type { ContactPersonFormErrors } from "../../types/contactPerson/ContactPersonFormErrors";
+import { useEffect } from "react";
+import ErrorSnackbar from "../../../components/common/ErrorSnackbar";
+import { useCompaniesLookup } from "../../../shared/hooks/useCompaniesLookup";
+import type { ContactPersonFormErrors } from "../models/ContactPersonFormErrors";
+import type { ContactPersonFormValues } from "../models/contactPersonFormValues";
 
 type ContactPersonFormDialogProps = {
   open: boolean;
   title: string;
-
-  companies: Company[];
-
-  companyId: string;
-  name: string;
-  position: string;
-  email: string;
-  phone: string;
-
+  form: ContactPersonFormValues;
   errors: ContactPersonFormErrors;
-
-  onCompanyIdChange: (value: string) => void;
-  onNameChange: (value: string) => void;
-  onPositionChange: (value: string) => void;
-  onEmailChange: (value: string) => void;
-  onPhoneChange: (value: string) => void;
-
+  onChange: (
+    field: keyof ContactPersonFormValues,
+    value: string | number,
+  ) => void;
   onClose: () => void;
   onSave: () => void;
 };
@@ -42,21 +34,26 @@ type ContactPersonFormDialogProps = {
 export default function ContactPersonFormDialog({
   open,
   title,
-  companies,
-  companyId,
-  name,
-  position,
-  email,
-  phone,
+  form,
   errors,
-  onCompanyIdChange,
-  onNameChange,
-  onPositionChange,
-  onEmailChange,
-  onPhoneChange,
+  onChange,
   onClose,
   onSave,
 }: ContactPersonFormDialogProps) {
+  const {
+    companies,
+    loadingCompanies,
+    companyError,
+    loadCompanies,
+    clearCompanyError,
+  } = useCompaniesLookup();
+
+  useEffect(() => {
+    if (open) {
+      loadCompanies();
+    }
+  }, [open]);
+
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
       <DialogTitle>{title}</DialogTitle>
@@ -71,8 +68,11 @@ export default function ContactPersonFormDialog({
 
           <Select
             label="Company"
-            value={companyId}
-            onChange={(event) => onCompanyIdChange(event.target.value)}
+            value={form.companyId}
+            disabled={loadingCompanies}
+            onChange={(event) =>
+              onChange("companyId", event.target.value.toString())
+            }
           >
             {companies.map((company) => (
               <MenuItem key={company.id} value={company.id.toString()}>
@@ -80,6 +80,10 @@ export default function ContactPersonFormDialog({
               </MenuItem>
             ))}
           </Select>
+
+          <FormHelperText>
+            {loadingCompanies && "Loading companies..."}
+          </FormHelperText>
 
           {errors.companyId && (
             <Typography
@@ -94,8 +98,8 @@ export default function ContactPersonFormDialog({
 
         <TextField
           label="Name"
-          value={name}
-          onChange={(event) => onNameChange(event.target.value)}
+          value={form.name}
+          onChange={(event) => onChange("name", event.target.value)}
           error={Boolean(errors.name)}
           helperText={errors.name}
           fullWidth
@@ -104,8 +108,8 @@ export default function ContactPersonFormDialog({
 
         <TextField
           label="Position"
-          value={position}
-          onChange={(event) => onPositionChange(event.target.value)}
+          value={form.position}
+          onChange={(event) => onChange("position", event.target.value)}
           error={Boolean(errors.position)}
           helperText={errors.position}
           fullWidth
@@ -114,8 +118,8 @@ export default function ContactPersonFormDialog({
 
         <TextField
           label="Email"
-          value={email}
-          onChange={(event) => onEmailChange(event.target.value)}
+          value={form.email}
+          onChange={(event) => onChange("email", event.target.value)}
           error={Boolean(errors.email)}
           helperText={errors.email}
           fullWidth
@@ -124,10 +128,10 @@ export default function ContactPersonFormDialog({
 
         <TextField
           label="Phone"
-          value={phone}
-          onChange={(event) => onPhoneChange(event.target.value)}
-          error={Boolean(errors.phone)}
-          helperText={errors.phone}
+          value={form.phoneNumber}
+          onChange={(event) => onChange("phoneNumber", event.target.value)}
+          error={Boolean(errors.phoneNumber)}
+          helperText={errors.phoneNumber}
           fullWidth
           margin="normal"
         />
@@ -140,6 +144,12 @@ export default function ContactPersonFormDialog({
           Save
         </Button>
       </DialogActions>
+
+      <ErrorSnackbar
+        open={Boolean(companyError)}
+        message={companyError}
+        onClose={clearCompanyError}
+      />
     </Dialog>
   );
 }

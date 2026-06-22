@@ -10,14 +10,14 @@ import {
   Typography,
 } from "@mui/material";
 
-import { getContactPersonById } from "../../api/contactPersonsApi";
+import { getContactPersonById } from "../../../api/contactPersonsApi";
 
-import type { ContactPerson } from "../../types/contactPerson/contactPerson";
-import DetailRow from "../../components/common/DetailRow";
+import type { ContactPerson } from "../models/contactPerson";
+import DetailRow from "../../../components/common/DetailRow";
+import LoadingSpinner from "../../../components/common/LoadingSpinner";
 
 export default function ContactPersonDetailsPage() {
   const { id } = useParams();
-
   const navigate = useNavigate();
 
   const [contact, setContact] = useState<ContactPerson | null>(null);
@@ -37,7 +37,7 @@ export default function ContactPersonDetailsPage() {
   }, [id]);
 
   if (!contact) {
-    return <Typography>Loading...</Typography>;
+    return <LoadingSpinner />;
   }
 
   return (
