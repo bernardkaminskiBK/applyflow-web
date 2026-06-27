@@ -11,6 +11,7 @@ import CompanyDetailsPage from "./features/companies/pages/CompanyDetailsPage";
 import JobApplicationsPage from "./features/jobApplications/pages/JobApplicationsPage";
 import LoginPage from "./features/auth/pages/LoginPage";
 import ProtectedRoute from "./features/auth/components/ProtectedRoute";
+import RegisterPage from "./features/auth/pages/RegisterPage";
 
 export default function App() {
   return (
@@ -18,6 +19,8 @@ export default function App() {
       <AppLayout>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
+
+          <Route path="/register" element={<RegisterPage />} />
 
           <Route
             path="/"

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import {
   Alert,
   Box,
@@ -10,13 +10,11 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { login } from "../../../api/authApi";
-import LoadingSpinner from "../../../components/common/LoadingSpinner";
+import { register } from "../../../api/authApi";
 import type { AuthFormErrors } from "../models/authFormErrors";
 
-export default function LoginPage() {
+export default function RegisterPage() {
   const navigate = useNavigate();
-  const successMessage = useLocation().state?.successMessage;
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -24,19 +22,23 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<AuthFormErrors | null>(null);
 
-  async function handleLogin() {
+  async function handleRegister() {
     try {
       setLoading(true);
       setErrors(null);
 
-      const response = await login({
+      await register({
         email,
         password,
       });
 
-      localStorage.setItem("token", response.token);
-
-      navigate("/");
+      navigate("/login", {
+        replace: true,
+        state: {
+          successMessage:
+            "Registration completed successfully. Please sign in.",
+        },
+      });
     } catch (error: any) {
       const validationErrors = error.response?.data?.errors;
       const registerErrorMessage = error.response?.data?.message || "";
@@ -45,16 +47,12 @@ export default function LoginPage() {
         setErrors({
           email: validationErrors?.Email?.[0],
           password: validationErrors?.Password?.[0],
-          message: "Login failed. " + registerErrorMessage,
+          message: "Registration failed. " + registerErrorMessage,
         });
       }
     } finally {
       setLoading(false);
     }
-  }
-
-  if (loading) {
-    <LoadingSpinner />;
   }
 
   return (
@@ -66,13 +64,7 @@ export default function LoginPage() {
         alignItems: "center",
       }}
     >
-      <Paper
-        elevation={3}
-        sx={{
-          width: 400,
-          p: 4,
-        }}
-      >
+      <Paper elevation={3} sx={{ width: 400, p: 4 }}>
         <Stack spacing={3}>
           <Box>
             <Typography
@@ -81,15 +73,14 @@ export default function LoginPage() {
                 fontWeight: "bold",
               }}
             >
-              ApplyFlow
+              Create account
             </Typography>
 
             <Typography variant="body2" color="text.secondary">
-              Sign in to continue
+              Register to start using ApplyFlow
             </Typography>
           </Box>
 
-          {successMessage && <Alert severity="success">{successMessage}</Alert>}
           {errors?.message && <Alert severity="error">{errors.message}</Alert>}
 
           <TextField
@@ -113,11 +104,11 @@ export default function LoginPage() {
 
           <Button
             variant="contained"
-            onClick={handleLogin}
+            onClick={handleRegister}
             disabled={loading}
             fullWidth
           >
-            {loading ? "Signing in..." : "Sign in"}
+            {loading ? "Creating account..." : "Register"}
           </Button>
 
           <Typography
@@ -126,9 +117,9 @@ export default function LoginPage() {
               textAlign: "center",
             }}
           >
-            Don&apos;t have an account?{" "}
-            <Link component={RouterLink} to="/register">
-              Register
+            Already have an account?{" "}
+            <Link component={RouterLink} to="/login">
+              Sign in
             </Link>
           </Typography>
         </Stack>
