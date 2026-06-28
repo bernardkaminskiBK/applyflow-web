@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 import {
   AppBar,
   Box,
@@ -8,13 +8,14 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
+import { useAuth } from "../../features/auth/context/AuthContext";
 
 type AppLayoutProps = {
   children: ReactNode;
 };
 
 export default function AppLayout({ children }: AppLayoutProps) {
-  const navigate = useNavigate();
+  const { logout } = useAuth();
   return (
     <Box>
       <AppBar position="static">
@@ -50,10 +51,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
           <Button
             color="inherit"
             sx={{ ml: "auto", fontWeight: "bold" }}
-            onClick={() => {
-              localStorage.removeItem("token");
-              navigate("/login");
-            }}
+            onClick={logout}
           >
             Log out
           </Button>
