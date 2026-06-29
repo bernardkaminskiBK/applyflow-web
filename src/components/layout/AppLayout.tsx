@@ -9,6 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useAuth } from "../../features/auth/context/AuthContext";
+import { useAppTheme } from "../../features/theme/context/ThemeContext";
 
 type AppLayoutProps = {
   children: ReactNode;
@@ -16,6 +17,7 @@ type AppLayoutProps = {
 
 export default function AppLayout({ children }: AppLayoutProps) {
   const { logout } = useAuth();
+  const { darkMode, toggleTheme } = useAppTheme();
   return (
     <Box>
       <AppBar position="static">
@@ -54,6 +56,10 @@ export default function AppLayout({ children }: AppLayoutProps) {
             onClick={logout}
           >
             Log out
+          </Button>
+
+          <Button color="inherit" onClick={toggleTheme}>
+            {darkMode ? "☀️" : "🌙"}
           </Button>
         </Toolbar>
       </AppBar>
