@@ -15,6 +15,7 @@ import RegisterPage from "./features/auth/pages/RegisterPage";
 import { AuthProvider } from "./features/auth/context/AuthContext";
 import { AppThemeProvider } from "./features/theme/context/ThemeContext";
 import { Box } from "@mui/material";
+import AdminPage from "./features/admin/pages/AdminPage";
 
 export default function App() {
   return (
@@ -110,6 +111,15 @@ export default function App() {
                   element={
                     <ProtectedRoute>
                       <ContactPersonDetailsPage />
+                    </ProtectedRoute>
+                  }
+                />
+
+                <Route
+                  path="/admin"
+                  element={
+                    <ProtectedRoute>
+                      <AdminPage />
                     </ProtectedRoute>
                   }
                 />

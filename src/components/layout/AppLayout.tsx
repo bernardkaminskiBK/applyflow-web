@@ -50,6 +50,10 @@ export default function AppLayout({ children }: AppLayoutProps) {
             Contacts
           </Button>
 
+          <Button color="inherit" component={RouterLink} to="/admin">
+            Admin
+          </Button>
+
           <Button
             color="inherit"
             sx={{ ml: "auto", fontWeight: "bold" }}
