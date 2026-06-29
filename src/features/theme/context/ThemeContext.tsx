@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
 import { darkTheme, lightTheme } from "../theme";
 import { ThemeProvider } from "@emotion/react";
@@ -15,11 +15,17 @@ type AppThemeProviderProps = {
 };
 
 export function AppThemeProvider({ children }: AppThemeProviderProps) {
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(() => {
+    return localStorage.getItem("darkMode") === "true";
+  });
 
   function toggleTheme() {
     setDarkMode((previous) => !previous);
   }
+
+  useEffect(() => {
+    localStorage.setItem("darkMode", String(darkMode));
+  }, [darkMode]);
 
   const theme = useMemo(() => (darkMode ? darkTheme : lightTheme), [darkMode]);
 
